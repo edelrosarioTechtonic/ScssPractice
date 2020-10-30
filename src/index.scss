@@ -1,0 +1,61 @@
+$mappings: ("sm": 0px, "md": 786px, "lg": 1024px);
+
+@mixin columnContainer{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(12, 1fr);
+    grid-gap: 2%;
+    background-color: red;
+}
+
+@mixin  rowContainer {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 2%; 
+    background-color: red;
+}
+
+@mixin rowSpan($span, $r, $g, $b){
+    grid-row: span $span;
+    background-color: rgb($r, $g, $b);
+}
+
+@mixin columnSpan($span, $r, $g, $b) {
+    grid-column: span $span;
+    background-color: rgb($r, $g, $b);
+}
+
+.col{
+    @include columnContainer;
+    @each $size in map-keys($mappings){
+        @for $span from 1 through 12{
+            .row-#{$size}-#{$span}{
+                @media (min-width: map-get($mappings, $size)){
+                    $r: random(255);
+                    $g: random(255);
+                    $b: random(255);
+                    @include rowSpan($span, $r, $g, $b);
+                    border: 1px solid black;
+                }
+            }
+        }
+    }
+}
+
+.row{
+    @include rowContainer;
+    @each $size in map-keys($mappings){
+        @for $span from 1 through 12{
+            .col-#{$size}-#{$span}{
+                @media (min-width: map-get($mappings, $size)){
+                    $r: random(255);
+                    $g: random(255);
+                    $b: random(255);
+                    @include columnSpan($span, $r, $g, $b);
+                    border: 1px solid black;
+                }
+            }
+        }
+    }
+}
